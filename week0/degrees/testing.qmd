@@ -1,17 +1,16 @@
+```{python}
 import csv
 import sys
 
 from util import Node, StackFrontier, QueueFrontier
+```
 
-# Maps names to a set of corresponding person_ids
+```{python}
 names = {}
-
-# Maps person_ids to a dictionary of: name, birth, movies (a set of movie_ids)
 people = {}
-
-# Maps movie_ids to a dictionary of: title, year, stars (a set of person_ids)
 movies = {}
-
+```
+```{python}
 
 def load_data(directory: str):
     """
@@ -51,20 +50,20 @@ def load_data(directory: str):
             except KeyError:
                 pass
 
+```
 
+```{python}
 
-def shortest_path(source, target):
-    """
-    Returns the shortest list of (movie_id, person_id) pairs
-    that connect the source to the target.
+def main():
+    directory = "large"
 
-    If no possible path, returns None.
-    """
+    # Load data from files into memory
+    print("Loading data...")
+    load_data(directory)
+    print("Data loaded.")
+```
 
-    # TODO
-    raise NotImplementedError
-
-
+```{python}
 def person_id_for_name(name):
     """
     Returns the IMDB id for a person's name,
@@ -90,7 +89,9 @@ def person_id_for_name(name):
     else:
         return person_ids[0]
 
+```
 
+```{python}
 def neighbors_for_person(person_id):
     """
     Returns (movie_id, person_id) pairs for people
@@ -103,40 +104,9 @@ def neighbors_for_person(person_id):
             neighbors.add((movie_id, person_id))
     return neighbors
 
-
-def main():
-    if len(sys.argv) > 2:
-        sys.exit("Usage: python degrees.py [directory]")
-    directory = sys.argv[1] if len(sys.argv) == 2 else "large"
-
-    # Load data from files into memory
-    print("Loading data...")
-    load_data(directory)
-    print("Data loaded.")
-    print(names)
-    #
-    # source = person_id_for_name(input("Name: "))
-    # if source is None:
-    #     sys.exit("Person not found.")
-    # target = person_id_for_name(input("Name: "))
-    # if target is None:
-    #     sys.exit("Person not found.")
-    #
-    # path = shortest_path(source, target)
-    #
-    # if path is None:
-    #     print("Not connected.")
-    # else:
-    #     degrees = len(path)
-    #     print(f"{degrees} degrees of separation.")
-    #     path = [(None, source)] + path
-    #     for i in range(degrees):
-    #         person1 = people[path[i][1]]["name"]
-    #         person2 = people[path[i + 1][1]]["name"]
-    #         movie = movies[path[i + 1][0]]["title"]
-    #         print(f"{i + 1}: {person1} and {person2} starred in {movie}")
+```
 
 
-
-if __name__ == "__main__":
-    main()
+```{python}
+main()
+```
