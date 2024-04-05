@@ -52,16 +52,6 @@ def load_data(directory: str):
 
 ```
 
-```{python}
-
-def main():
-    directory = "large"
-
-    # Load data from files into memory
-    print("Loading data...")
-    load_data(directory)
-    print("Data loaded.")
-```
 
 ```{python}
 def person_id_for_name(name):
@@ -106,7 +96,28 @@ def neighbors_for_person(person_id):
 
 ```
 
+```{python}
+
+def main():
+    directory = "small"
+
+    # Load data from files into memory
+    print("Loading data...")
+    load_data(directory)
+    print("Data loaded.")
+    display_dictonary(movies)
+```
+```{python}
+def display_dictonary(dictionary: dict) -> None:
+    for key, value in dictionary.items():
+        print(f"{key}: {value}")
+        print(type(key))
+```
 
 ```{python}
 main()
+```
+
+```{python}
+movies.keys()
 ```

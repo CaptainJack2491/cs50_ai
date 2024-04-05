@@ -53,16 +53,27 @@ def load_data(directory: str):
 
 
 
-def shortest_path(source, target):
+def shortest_path(source:str, target:str):
     """
     Returns the shortest list of (movie_id, person_id) pairs
     that connect the source to the target.
 
     If no possible path, returns None.
     """
-
+    initial_state = Node(source,None,None)
+    frontier = StackFrontier()
+    frontier.add(initial_state)
+    # Main loop
+    if frontier.empty():
+        return None
+    node: Node = frontier.remove()
+    # How the fuck do i expand node
+    neighbors:set = neighbors_for_person(node.state)
+    for movie_ids, person_id in neighbors:
+        temp_node: Node = Node(person_id,node,movie_ids)
+        frontier.add(temp_node)
+    print(frontier.frontier)
     # TODO
-    raise NotImplementedError
 
 
 def person_id_for_name(name):
@@ -103,18 +114,21 @@ def neighbors_for_person(person_id):
             neighbors.add((movie_id, person_id))
     return neighbors
 
+def display_dictonary(dictionary: dict) -> None:
+    for key, value in dictionary.items():
+        print(f"{key}: {value}")
 
 def main():
     if len(sys.argv) > 2:
         sys.exit("Usage: python degrees.py [directory]")
-    directory = sys.argv[1] if len(sys.argv) == 2 else "large"
+    directory = sys.argv[1] if len(sys.argv) == 2 else "small"
 
     # Load data from files into memory
     print("Loading data...")
     load_data(directory)
     print("Data loaded.")
-    print(names)
-    #
+    print(movies)
+    shortest_path('129','1697')
     # source = person_id_for_name(input("Name: "))
     # if source is None:
     #     sys.exit("Person not found.")
