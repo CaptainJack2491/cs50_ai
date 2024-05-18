@@ -1,4 +1,5 @@
 import csv
+import time
 import sys
 
 from util import Node, StackFrontier, QueueFrontier
@@ -64,16 +65,57 @@ def shortest_path(source:str, target:str):
     frontier = StackFrontier()
     frontier.add(initial_state)
     # Main loop
-    if frontier.empty():
-        return None
-    node: Node = frontier.remove()
-    # How the fuck do i expand node
-    neighbors:set = neighbors_for_person(node.state)
-    for movie_ids, person_id in neighbors:
-        temp_node: Node = Node(person_id,node,movie_ids)
-        frontier.add(temp_node)
-    print(frontier.frontier)
-    # TODO
+    print('loop starting')
+    times: int = 0
+    seen: list[str] = []
+    while True:
+        if frontier.empty():
+            return None
+
+        # print_frontier(frontier)
+        times += 1
+        print('loop ran ', times, 'times')
+        # time.sleep(1)
+        
+        # if not, select a node from the frontier
+        node: Node = frontier.remove()
+        print(node.state, 'node removed')
+
+        # print_frontier(frontier)
+        # if the node is the target node, return the frontier list
+        if node.state == target:
+            print('found target node')
+            ans:list[tuple] = []
+            while node.parent is not None:
+                ans += [(node.state,node.action)]
+                node = node.parent
+
+            print(ans)
+            return ans
+
+        # expand node, getting resulting nodes to the frontier
+        neighbors:set = neighbors_for_person(node.state)
+        print(neighbors)
+
+        # adding it to the frontier
+        for movie_ids, person_id in neighbors:
+            temp_node: Node = Node(state=person_id,parent=node,action=movie_ids)
+            if frontier.contains_state(person_id):
+                continue
+            elif temp_node.state in seen:
+                continue
+            else:
+                seen.append(temp_node.state)
+                frontier.add(temp_node)
+                print(seen)
+        # print_frontier(frontier)
+
+    
+def print_frontier(frontier):
+    nodes = []
+    for node in frontier.frontier:
+        nodes.append(node.state)
+    print(nodes)
 
 
 def person_id_for_name(name):
@@ -127,9 +169,7 @@ def main():
     print("Loading data...")
     load_data(directory)
     print("Data loaded.")
-    print(movies)
-    shortest_path('129','1697')
-    # source = person_id_for_name(input("Name: "))
+    print(shortest_path('129','1697'))
     # if source is None:
     #     sys.exit("Person not found.")
     # target = person_id_for_name(input("Name: "))
